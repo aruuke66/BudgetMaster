@@ -6,28 +6,29 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.budgetmaster.MainWindowController"
-      prefWidth="400" prefHeight="300">
+<VBox alignment="CENTER" prefHeight="300" prefWidth="400" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.budgetmaster.MainWindowController">
 
-    <Label fx:id="currentBudgetLabel" text="Current Budget: 0.0" />
+    <Label fx:id="currentBudgetLabel" alignment="CENTER" text="Current Budget: 0.0" textFill="#1a971e">
+        <font>
+            <Font size="19.0" />
+        </font></Label>
 
     <TabPane VBox.vgrow="ALWAYS">
         <tabs>
-            <Tab text="Expenses" closable="false">
+            <Tab closable="false" text="Expenses">
                 <content>
                     <VBox>
-                        <Button text="Add Expenses" onAction="#openExpensesPopup" />
+                        <Button onAction="#openExpensesPopup" text="Add Expenses" />
                         <ListView fx:id="expensesListView" />
                     </VBox>
                 </content>
             </Tab>
-            <Tab text="Income" closable="false">
+            <Tab closable="false" text="Income">
                 <content>
                     <VBox>
-                        <Button text="Add Income" onAction="#openIncomePopup" />
+                        <Button onAction="#openIncomePopup" text="Add Income" />
                         <ListView fx:id="incomeListView" />
                     </VBox>
                 </content>

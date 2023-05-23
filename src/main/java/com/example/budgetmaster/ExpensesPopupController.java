@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.function.UnaryOperator;
 
 import javafx.scene.control.TextFormatter;
@@ -52,8 +53,12 @@ public class ExpensesPopupController {
 
         String amountValue = amountParts[0];
 
-        // Check for duplicate entry
-        String expenseRecord = amountValue + " KGS - " + name + " - " + date.toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String formattedDate = date.format(formatter);
+
+        // Create the expense record
+        String expenseRecord = amountValue + " KGS - " + name + " - " + formattedDate;
+
         if (expensesListView.getItems().contains(expenseRecord)) {
             return; // Don't add if the entry already exists
         }
