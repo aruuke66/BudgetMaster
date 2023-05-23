@@ -6,9 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,12 +20,19 @@ public class MainWindowController {
     @FXML
     private Label currentBudgetLabel;
 
+    private double currentBudget;
+
     public Label getCurrentBudgetLabel() {
         return currentBudgetLabel;
     }
 
     public void setCurrentBudgetLabel(double budget) {
         currentBudgetLabel.setText(String.valueOf(budget));
+    }
+
+    public void setCurrentBudget(double budget) {
+        this.currentBudget = budget;
+        setCurrentBudgetLabel(budget);
     }
 
     @FXML
@@ -55,5 +59,24 @@ public class MainWindowController {
         stage.setScene(new Scene(root));
         stage.setTitle("Add Income");
         stage.show();
+    }
+
+    @FXML
+    private void initialize() {
+        setCurrentBudget(0.0);
+
+        // Set custom cell factory for expensesListView
+        expensesListView.setCellFactory(listView -> new ExpenseListCell(expensesListView));
+        incomeListView.setCellFactory(listView -> new IncomeListCell(incomeListView));
+
+
+        // Set the controller property in the root node
+        Parent root = currentBudgetLabel.getParent();
+        root.getProperties().put("controller", this);
+    }
+
+    public void updateCurrentBudget(double amount) {
+        currentBudget += amount;
+        setCurrentBudget(currentBudget);
     }
 }
