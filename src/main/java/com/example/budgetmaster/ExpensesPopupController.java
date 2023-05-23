@@ -44,8 +44,21 @@ public class ExpensesPopupController {
             return; // Don't add if any field is empty
         }
 
-        double expensesAmount = Double.parseDouble(amount);
-        String expenseRecord = amount + " - " + name + " - " + date.toString();
+        // Extract numeric part of the amount string
+        String[] amountParts = amount.split(" - ");
+        if (amountParts.length < 1) {
+            return; // Invalid amount format
+        }
+
+        String amountValue = amountParts[0];
+
+        // Check for duplicate entry
+        String expenseRecord = amountValue + " KGS - " + name + " - " + date.toString();
+        if (expensesListView.getItems().contains(expenseRecord)) {
+            return; // Don't add if the entry already exists
+        }
+
+        double expensesAmount = Double.parseDouble(amountValue);
         expensesListView.getItems().add(expenseRecord);
         saveRecordToFile(expenseRecord, "expenses.txt");
 
@@ -61,6 +74,7 @@ public class ExpensesPopupController {
             currentBudgetLabel.setText(String.valueOf(currentBudget));
         }
     }
+
 
     private void saveRecordToFile(String record, String fileName) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {

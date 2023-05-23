@@ -1,5 +1,6 @@
 package com.example.budgetmaster;
 
+
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
@@ -44,8 +45,21 @@ public class IncomePopupController {
             return; // Don't add if any field is empty
         }
 
-        double incomeAmount = Double.parseDouble(amount);
-        String incomeRecord = amount + " - " + name + " - " + date.toString();
+        // Extract numeric part of the amount string
+        String[] amountParts = amount.split(" - ");
+        if (amountParts.length < 1) {
+            return; // Invalid amount format
+        }
+
+        String amountValue = amountParts[0];
+
+        // Check for duplicate entry
+        String incomeRecord = amountValue + " KGS - " + name + " - " + date.toString();
+        if (incomeListView.getItems().contains(incomeRecord)) {
+            return; // Don't add if the entry already exists
+        }
+
+        double incomeAmount = Double.parseDouble(amountValue);
         incomeListView.getItems().add(incomeRecord);
         saveRecordToFile(incomeRecord, "income.txt");
 
@@ -61,6 +75,7 @@ public class IncomePopupController {
             currentBudgetLabel.setText(String.valueOf(currentBudget));
         }
     }
+
 
     private void saveRecordToFile(String record, String fileName) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
@@ -87,3 +102,4 @@ public class IncomePopupController {
         datePicker.setValue(LocalDate.now());
     }
 }
+
