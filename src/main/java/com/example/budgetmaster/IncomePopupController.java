@@ -8,11 +8,11 @@ import javafx.scene.control.TextField;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import javafx.scene.control.TextFormatter;
-
 import java.time.LocalDate;
 import java.util.function.UnaryOperator;
+
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Label;
 
 public class IncomePopupController {
     @FXML
@@ -21,13 +21,18 @@ public class IncomePopupController {
     @FXML
     private TextField nameTextField;
 
-    private ListView<String> incomeListView;
-
     @FXML
     private DatePicker datePicker;
 
+    private ListView<String> incomeListView;
+    private MainWindowController mainWindowController;
+
     public void setIncomeListView(ListView<String> incomeListView) {
         this.incomeListView = incomeListView;
+    }
+
+    public void setMainWindowController(MainWindowController mainWindowController) {
+        this.mainWindowController = mainWindowController;
     }
 
     public void addButtonClicked() throws IOException {
@@ -39,11 +44,22 @@ public class IncomePopupController {
             return; // Don't add if any field is empty
         }
 
+        double incomeAmount = Double.parseDouble(amount);
         String incomeRecord = amount + " - " + name + " - " + date.toString();
         incomeListView.getItems().add(incomeRecord);
         saveRecordToFile(incomeRecord, "income.txt");
 
         clearFields();
+
+        // Update current budget label
+        Label currentBudgetLabel = mainWindowController.getCurrentBudgetLabel();
+        String currentBudgetText = currentBudgetLabel.getText().replace("Current Budget: ", "");
+
+        if (!currentBudgetText.isEmpty()) {
+            double currentBudget = Double.parseDouble(currentBudgetText);
+            currentBudget += incomeAmount;
+            currentBudgetLabel.setText(String.valueOf(currentBudget));
+        }
     }
 
     private void saveRecordToFile(String record, String fileName) throws IOException {
